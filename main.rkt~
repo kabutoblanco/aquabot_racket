@@ -4,11 +4,6 @@
 
 ;--------------------------------------
 ;conexion base datos
-(define conexion
-  (mysql-connect #:server "localhost"
-                 #:port 1520
-                 #:database "aquabot"
-                 #:user "root"))
 ;--------------------------------------
 
 ;--------------------------------------
@@ -17,5 +12,4 @@
 
 ;--------------------------------------
 ;logica
-(query-rows conexion "select * from USUARIOS")
 ;--------------------------------------
