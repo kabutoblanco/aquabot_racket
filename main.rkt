@@ -32,9 +32,9 @@ x
 (define e 0)
 (set! e (suma x 0))
 
-(define (promedio suma cantidad) (/ suma (car cantidad)))
+(define (media suma cantidad) (/ suma (car cantidad)))
 (define z 0)
-(set! z (promedio e y))
+(set! z (media e y))
 z
 
 (define (varianza lista promedio cantidad r) (if (null? lista) (/ r cantidad) (varianza (cdr lista) promedio cantidad (+ r (expt (- (car lista) promedio) 2)))))
@@ -46,4 +46,18 @@ w
 (define q 0)
 (set! q (desviacion w))
 q
+
+(define (mediana-r lista paridad n i)
+  (if (= paridad 0)
+      (if (= (- (floor (/ n 2)) 1) i)
+          (/ (+ (car lista) (car (cdr lista))) 2)
+          (mediana-r (cdr lista) paridad n (+ i 1)))
+      (if (= (floor (/ n 2)) i)
+          (car lista)
+          (mediana-r (cdr lista) paridad n (+ i 1)))
+      ))
+(define (mediana lista paridad n) (if (null? lista) (0) (mediana-r lista paridad n 0)))
+(define t 0)
+(set! t (mediana (sort x <) (modulo (car y) 2) (car y)))
+t
 ;--------------------------------------
