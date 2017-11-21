@@ -34,7 +34,11 @@
 (define e 0)
 (set! e (suma x 0))
 
-(define (media suma cantidad) (/ suma (car cantidad)))
+(define (media suma cantidad)
+  (if (null? cantidad) 0
+      (if (= (car cantidad) 0)
+          0
+          (/ suma (car cantidad)))))
 (define z 0)
 (set! z (media e y))
 z
