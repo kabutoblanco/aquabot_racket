@@ -60,4 +60,24 @@ q
 (define t 0)
 (set! t (mediana (sort x <) (modulo (car y) 2) (car y)))
 t
+
+(define media-i (cons 0 0))
+media-i
+
+(define (contar-r lista n r)
+  (if (null? lista)
+      r
+      (if (equal? (car lista) n) (contar-r (cdr lista) n (+ r 1)) (contar-r (cdr lista) n r))))
+(contar-r x 13 0)
+
+(define (moda-r lista r) (if (null? lista) r (if (> (contar-r x (car lista) 0) (cdr r)) (moda-r (cdr lista) (cons (car lista) (contar-r x (car lista) 0))) (moda-r (cdr lista) r))))
+;media por consumo menor
+(set! media-i (moda-r (sort x <) media-i))
+media-i
+
+(set! media-i (cons 0 0))
+
+;media por consumo mayor
+(set! media-i (moda-r (sort x >) media-i))
+media-i
 ;--------------------------------------
