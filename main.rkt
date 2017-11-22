@@ -73,7 +73,7 @@ q
 (set! t (mediana (sort x <) (modulo (car y) 2) (car y)))
 t
 
-(define media-i (cons 0 0))
+(define moda-i (cons 0 0))
 
 (define (contar-r lista n r)
   (if (null? lista)
@@ -90,12 +90,12 @@ t
           (moda-r (cdr lista) r))))
 
 ;media por consumo menor
-(set! media-i (moda-r (sort x <) media-i))
-media-i
+(set! moda-i (moda-r (sort x <) moda-i))
+moda-i
 
-(set! media-i (cons 0 0))
+(set! moda-i (cons 0 0))
 
 ;media por consumo mayor
-(set! media-i (moda-r (sort x >) media-i))
-media-i
+(set! moda-i (moda-r (sort x >) moda-i))
+moda-i
 ;--------------------------------------

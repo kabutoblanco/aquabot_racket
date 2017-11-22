@@ -2,10 +2,10 @@
 -- version 4.7.4
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Nov 19, 2017 at 02:02 AM
--- Server version: 10.1.28-MariaDB
--- PHP Version: 7.1.11
+-- Servidor: localhost
+-- Tiempo de generación: 22-11-2017 a las 15:45:30
+-- Versión del servidor: 10.1.28-MariaDB
+-- Versión de PHP: 7.1.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,13 +19,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `aquabot`
+-- Base de datos: `aquabot`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ACTIVIDADES`
+-- Estructura de tabla para la tabla `ACTIVIDADES`
 --
 
 CREATE TABLE `ACTIVIDADES` (
@@ -36,7 +36,7 @@ CREATE TABLE `ACTIVIDADES` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `BARRIOS`
+-- Estructura de tabla para la tabla `BARRIOS`
 --
 
 CREATE TABLE `BARRIOS` (
@@ -44,26 +44,10 @@ CREATE TABLE `BARRIOS` (
   `barrNombre` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `BARRIOS`
---
-
-INSERT INTO `BARRIOS` (`barrId`, `barrNombre`) VALUES
-(2, 'Bello Horizonte'),
-(7, 'Bosques de Pomona'),
-(8, 'El Centro'),
-(6, 'La Arboleda'),
-(10, 'La Esmeralda'),
-(1, 'La Paz'),
-(4, 'Lomas de Granda'),
-(9, 'Los Sauces'),
-(3, 'Tomas Cipriano'),
-(5, 'Villa del Norte');
-
 -- --------------------------------------------------------
 
 --
--- Table structure for table `CASAS`
+-- Estructura de tabla para la tabla `CASAS`
 --
 
 CREATE TABLE `CASAS` (
@@ -74,17 +58,10 @@ CREATE TABLE `CASAS` (
   `casaDireccion` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `CASAS`
---
-
-INSERT INTO `CASAS` (`casaId`, `barrId`, `ciudId`, `casaEstrato`, `casaDireccion`) VALUES
-(1, 5, 1, 3, 'calle 73 cn # 1-57');
-
 -- --------------------------------------------------------
 
 --
--- Table structure for table `CIUDADES`
+-- Estructura de tabla para la tabla `CIUDADES`
 --
 
 CREATE TABLE `CIUDADES` (
@@ -92,17 +69,10 @@ CREATE TABLE `CIUDADES` (
   `ciudNombre` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `CIUDADES`
---
-
-INSERT INTO `CIUDADES` (`ciudId`, `ciudNombre`) VALUES
-(1, 'Popayan');
-
 -- --------------------------------------------------------
 
 --
--- Table structure for table `CONTADORES`
+-- Estructura de tabla para la tabla `CONTADORES`
 --
 
 CREATE TABLE `CONTADORES` (
@@ -111,17 +81,10 @@ CREATE TABLE `CONTADORES` (
   `contRegistro` decimal(4,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `CONTADORES`
---
-
-INSERT INTO `CONTADORES` (`contId`, `casaId`, `contRegistro`) VALUES
-(1, 1, '12.00');
-
 -- --------------------------------------------------------
 
 --
--- Table structure for table `DETALLE_SENSORES`
+-- Estructura de tabla para la tabla `DETALLE_SENSORES`
 --
 
 CREATE TABLE `DETALLE_SENSORES` (
@@ -134,7 +97,7 @@ CREATE TABLE `DETALLE_SENSORES` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `HISTORIALES`
+-- Estructura de tabla para la tabla `HISTORIALES`
 --
 
 CREATE TABLE `HISTORIALES` (
@@ -143,23 +106,10 @@ CREATE TABLE `HISTORIALES` (
   `histRegistro` decimal(4,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `HISTORIALES`
---
-
-INSERT INTO `HISTORIALES` (`histId`, `contId`, `histRegistro`) VALUES
-(1, 1, '13.00'),
-(2, 1, '14.00'),
-(3, 1, '13.00'),
-(4, 1, '16.00'),
-(5, 1, '17.00'),
-(6, 1, '20.00'),
-(7, 1, '10.00');
-
 -- --------------------------------------------------------
 
 --
--- Table structure for table `SENSORES`
+-- Estructura de tabla para la tabla `SENSORES`
 --
 
 CREATE TABLE `SENSORES` (
@@ -170,7 +120,7 @@ CREATE TABLE `SENSORES` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `USUARIOS`
+-- Estructura de tabla para la tabla `USUARIOS`
 --
 
 CREATE TABLE `USUARIOS` (
@@ -184,32 +134,25 @@ CREATE TABLE `USUARIOS` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `USUARIOS`
---
-
-INSERT INTO `USUARIOS` (`usuaId`, `ciudId`, `usuaIdentidad`, `usuaNombres`, `usuaApellido1`, `usuaApellido2`, `usuaTelefono`) VALUES
-(1, 1, 12345, 'Miller Daniel', 'Quilindo', 'Velasco', '3226082649');
-
---
--- Indexes for dumped tables
+-- Índices para tablas volcadas
 --
 
 --
--- Indexes for table `ACTIVIDADES`
+-- Indices de la tabla `ACTIVIDADES`
 --
 ALTER TABLE `ACTIVIDADES`
   ADD PRIMARY KEY (`actiId`),
   ADD UNIQUE KEY `actiNombre` (`actiNombre`);
 
 --
--- Indexes for table `BARRIOS`
+-- Indices de la tabla `BARRIOS`
 --
 ALTER TABLE `BARRIOS`
   ADD PRIMARY KEY (`barrId`),
   ADD UNIQUE KEY `barrNombre` (`barrNombre`);
 
 --
--- Indexes for table `CASAS`
+-- Indices de la tabla `CASAS`
 --
 ALTER TABLE `CASAS`
   ADD PRIMARY KEY (`casaId`),
@@ -218,21 +161,21 @@ ALTER TABLE `CASAS`
   ADD KEY `fkCasaCiudad` (`ciudId`);
 
 --
--- Indexes for table `CIUDADES`
+-- Indices de la tabla `CIUDADES`
 --
 ALTER TABLE `CIUDADES`
   ADD PRIMARY KEY (`ciudId`),
   ADD UNIQUE KEY `ciudNombre` (`ciudNombre`);
 
 --
--- Indexes for table `CONTADORES`
+-- Indices de la tabla `CONTADORES`
 --
 ALTER TABLE `CONTADORES`
   ADD PRIMARY KEY (`contId`),
   ADD KEY `fkContadorCasa` (`casaId`);
 
 --
--- Indexes for table `DETALLE_SENSORES`
+-- Indices de la tabla `DETALLE_SENSORES`
 --
 ALTER TABLE `DETALLE_SENSORES`
   ADD PRIMARY KEY (`usuaId`,`sensId`,`actiId`),
@@ -240,98 +183,99 @@ ALTER TABLE `DETALLE_SENSORES`
   ADD KEY `fkSensorActividad` (`actiId`);
 
 --
--- Indexes for table `HISTORIALES`
+-- Indices de la tabla `HISTORIALES`
 --
 ALTER TABLE `HISTORIALES`
   ADD PRIMARY KEY (`histId`),
   ADD KEY `fkHistorialContador` (`contId`);
 
 --
--- Indexes for table `SENSORES`
+-- Indices de la tabla `SENSORES`
 --
 ALTER TABLE `SENSORES`
   ADD PRIMARY KEY (`sensId`),
   ADD KEY `fkSensorContador` (`contId`);
 
 --
--- Indexes for table `USUARIOS`
+-- Indices de la tabla `USUARIOS`
 --
 ALTER TABLE `USUARIOS`
   ADD PRIMARY KEY (`usuaId`),
   ADD UNIQUE KEY `usuaIdentidad` (`usuaIdentidad`),
-  ADD UNIQUE KEY `usuaTelefono` (`usuaTelefono`);
+  ADD UNIQUE KEY `usuaTelefono` (`usuaTelefono`),
+  ADD KEY `fkUsuarioCiudad` (`ciudId`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT de las tablas volcadas
 --
 
 --
--- AUTO_INCREMENT for table `ACTIVIDADES`
+-- AUTO_INCREMENT de la tabla `ACTIVIDADES`
 --
 ALTER TABLE `ACTIVIDADES`
   MODIFY `actiId` int(5) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `BARRIOS`
+-- AUTO_INCREMENT de la tabla `BARRIOS`
 --
 ALTER TABLE `BARRIOS`
-  MODIFY `barrId` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `barrId` int(5) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `CASAS`
+-- AUTO_INCREMENT de la tabla `CASAS`
 --
 ALTER TABLE `CASAS`
-  MODIFY `casaId` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `casaId` int(5) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `CIUDADES`
+-- AUTO_INCREMENT de la tabla `CIUDADES`
 --
 ALTER TABLE `CIUDADES`
-  MODIFY `ciudId` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ciudId` int(5) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `CONTADORES`
+-- AUTO_INCREMENT de la tabla `CONTADORES`
 --
 ALTER TABLE `CONTADORES`
-  MODIFY `contId` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `contId` int(5) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `HISTORIALES`
+-- AUTO_INCREMENT de la tabla `HISTORIALES`
 --
 ALTER TABLE `HISTORIALES`
-  MODIFY `histId` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `histId` int(5) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `SENSORES`
+-- AUTO_INCREMENT de la tabla `SENSORES`
 --
 ALTER TABLE `SENSORES`
   MODIFY `sensId` int(5) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `USUARIOS`
+-- AUTO_INCREMENT de la tabla `USUARIOS`
 --
 ALTER TABLE `USUARIOS`
-  MODIFY `usuaId` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `usuaId` int(5) NOT NULL AUTO_INCREMENT;
 
 --
--- Constraints for dumped tables
+-- Restricciones para tablas volcadas
 --
 
 --
--- Constraints for table `CASAS`
+-- Filtros para la tabla `CASAS`
 --
 ALTER TABLE `CASAS`
   ADD CONSTRAINT `fkCasaBarrio` FOREIGN KEY (`barrId`) REFERENCES `BARRIOS` (`barrId`),
   ADD CONSTRAINT `fkCasaCiudad` FOREIGN KEY (`ciudId`) REFERENCES `CIUDADES` (`ciudId`);
 
 --
--- Constraints for table `CONTADORES`
+-- Filtros para la tabla `CONTADORES`
 --
 ALTER TABLE `CONTADORES`
   ADD CONSTRAINT `fkContadorCasa` FOREIGN KEY (`casaId`) REFERENCES `CASAS` (`casaId`);
 
 --
--- Constraints for table `DETALLE_SENSORES`
+-- Filtros para la tabla `DETALLE_SENSORES`
 --
 ALTER TABLE `DETALLE_SENSORES`
   ADD CONSTRAINT `fkSensorActividad` FOREIGN KEY (`actiId`) REFERENCES `ACTIVIDADES` (`actiId`),
@@ -339,16 +283,22 @@ ALTER TABLE `DETALLE_SENSORES`
   ADD CONSTRAINT `fkSensorUsuario` FOREIGN KEY (`usuaId`) REFERENCES `USUARIOS` (`usuaId`);
 
 --
--- Constraints for table `HISTORIALES`
+-- Filtros para la tabla `HISTORIALES`
 --
 ALTER TABLE `HISTORIALES`
   ADD CONSTRAINT `fkHistorialContador` FOREIGN KEY (`contId`) REFERENCES `CONTADORES` (`contId`);
 
 --
--- Constraints for table `SENSORES`
+-- Filtros para la tabla `SENSORES`
 --
 ALTER TABLE `SENSORES`
   ADD CONSTRAINT `fkSensorContador` FOREIGN KEY (`contId`) REFERENCES `CONTADORES` (`contId`);
+
+--
+-- Filtros para la tabla `USUARIOS`
+--
+ALTER TABLE `USUARIOS`
+  ADD CONSTRAINT `fkUsuarioCiudad` FOREIGN KEY (`ciudId`) REFERENCES `CIUDADES` (`ciudId`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
