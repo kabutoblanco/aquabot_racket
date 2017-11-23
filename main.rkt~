@@ -17,28 +17,14 @@
 
 ;--------------------------------------
 ;logica
-(define (registrar-casa barrId casaEstrato casaDireccion)
-  (query-exec conexion "insert into CASAS values ('null', ?, ?, ?)" barrId casaEstrato casaDireccion))
-
-(define (registrar-usuario casaId usuaIdentidad usuaClave usuaNombres usuaApellido1 usuaApellido2 usuaTelefono)
-  (query-exec conexion "insert into USUARIOS values ('null', ?, ?, ?, ?, ?, ?, ?)" casaId usuaIdentidad usuaClave usuaNombres usuaApellido1 usuaApellido2 usuaTelefono))
-
-(define (registrar-contador casaId contNumero)
-  (query-exec conexion "insert into CONTADORES values ('null', ?, ?)" casaId contNumero))
-
-(define (registrar-historial-contador contId histRegistroC histFechaC)
-  (query-exec conexion "insert into HISTORIAL_CONTADORES values ('null', ?, ?, ?)" contId histRegistroC histFechaC))
-
-(define (consumos contId) (query-list conexion "select histRegistroC from HISTORIAL_CONTADORES where contId = ?" contId))
-(define (num_consumos contId) (query-list conexion "select count(*) from HISTORIAL_CONTADORES where contId = ?" contId))
+(define (consumos contId) (query-list conexion "select histRegistro from HISTORIALES where contId = contId"))
+(define (num_consumos contId) (query-list conexion "select count(*) from HISTORIALES where contId = contId"))
 
 (define x 0)
-(set! x (consumos 2))
-x
+(set! x (consumos 1))
 
 (define y 0)
-(set! y (num_consumos 2))
-y
+(set! y (num_consumos 1))
 
 (define (suma lista r)
   (if (null? lista)
@@ -59,9 +45,7 @@ z
 
 (define (varianza lista promedio cantidad r)
   (if (null? lista)
-      (if (= cantidad 0)
-          0
-          (/ r cantidad))
+      (/ r cantidad)
       (varianza (cdr lista) promedio cantidad (+ r (expt (- (car lista) promedio) 2)))))
 (define w 0)
 (set! w (varianza x z (- (car y) 1) 0))
