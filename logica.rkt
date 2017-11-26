@@ -1,8 +1,19 @@
 #lang racket
 (require "datos.rkt")
 ;--------------------------------------------------------------------------------------------------------------------------------
+;variables y servicios que proveé
+;--------------------------------------------------------------------------------------------------------------------------------
+(provide caddddr cadddddr caddddddr valor-metro3 get-consumos)
+;--------------------------------------------------------------------------------------------------------------------------------
 ;logica
 ;--------------------------------------------------------------------------------------------------------------------------------
+;servicios basicos
+;--------------------------------------------------------------------------------------------------------------------------------
+(define (caddddr lista) (car-i lista 0 4))
+(define (cadddddr lista) (car-i lista 0 5))
+(define (caddddddr lista) (car-i lista 0 6))
+(define (car-i lista i n) (if (= i n) (car lista) (car-i (cdr lista) (+ i 1) n)))
+
 (define x 0)
 (set! x (consumo-actual-usuario-sql 1))
 x
@@ -85,4 +96,26 @@ moda-i
 ;media por consumo mayor
 (set! moda-i (moda-r (sort x >) moda-i))
 moda-i
+;--------------------------------------------------------------------------------------------------------------------------------
+;servicios funcionales
+;--------------------------------------------------------------------------------------------------------------------------------
+;calcular el valor en pesos colombinos del metro cubico de agua segun algunos criterios
+(define (valor-metro3 consumo1 consumo2 estrato)
+  (println consumo1) (println consumo2)
+  (if (< consumo1 0) (set! consumo1 (+ consumo2 1)) (set consumo1 consumo1))
+  (if (= consumo2 0) (set! consumo1 (+ consumo2 1)) (set consumo1 consumo1))
+  (println consumo1) (println consumo2)
+  (cond
+    [(<= (- consumo1 consumo2) 0) (/ (* estrato 16) 5)]
+    [(<= (- consumo1 consumo2) 2) (* (/ (- consumo1 consumo2) (* estrato 18)) 10000)]
+    [(<= (- consumo1 consumo2) 5) (* (/ (- consumo1 consumo2) (* estrato 17)) 10000)]
+    [(<= (- consumo1 consumo2) 8) (* (/ (- consumo1 consumo2) (* estrato 16)) 10000)]
+    [(<= (- consumo1 consumo2) 11) (* (/ (- consumo1 consumo2) (* estrato 15)) 10000)]
+    [(>  (- consumo1 consumo2) 11) (* (/ (- consumo1 consumo2) (* estrato 12)) 10000)]))
+;--------------------------------------------------------------------------------------------------------------------------------
+;retorna una lista con los consumos de la 'lista'
+(define (get-consumos lista lista2)
+  (if (> (length lista) 1)      
+      (get-consumos (cdr lista) (cons (- (car lista) (cadr lista)) lista2))
+      (reverse lista2)))
 ;--------------------------------------------------------------------------------------------------------------------------------
