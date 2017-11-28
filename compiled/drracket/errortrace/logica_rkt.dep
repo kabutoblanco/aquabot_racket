@@ -1,0 +1,1 @@
+("6.11" ("b4b03cbfe87e83bce2320c27abed1bc2d75efe39" . "3af45fccd1614b918239178b0cb055058b71bf20") #"/home/daniel/Documentos/aquabot_racket/datos.rkt" (collects #"errortrace" #"errortrace-key.rkt") (collects #"racket" #"main.rkt") (collects #"racket" #"runtime-config.rkt"))

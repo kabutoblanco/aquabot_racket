@@ -17,7 +17,7 @@
        (horiz-margin 50)
        [min-height 10]
        [min-width 150]
-       [label "Respecto a usuario:\t\t"]))
+       [label "Respecto a usuario:\t\t "]))
 
 (define txt-recomendacion-consumo
   (new text-field%
@@ -57,7 +57,7 @@
        (horiz-margin 75)
        [min-height 10]
        [min-width 75]
-       [label "Consumo:"]))
+       [label "Consumos:"]))
 
 (define panel-reco3
   (new horizontal-panel%[parent ventana-recomendar][alignment'(center center)]))
