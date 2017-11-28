@@ -1,8 +1,7 @@
 #lang racket
-(require racket/gui/base)
 (require db)
 ;--------------------------------------------------------------------------------------------------------------------------------
-;variables y servicios que proveé
+;publico
 ;--------------------------------------------------------------------------------------------------------------------------------
 (provide conexion autenticar registrar-sql get-usuario-id get-usuario-autenticado usuario-sistema usuario-foraneo usuario-consumo
          contador-consumos-sql get-usuario-?-desperdicio-sql get-usuario-consumo contadores-consumos-sql consumo-actual-usuario-sql
@@ -16,7 +15,7 @@
                  #:database "aquabot"
                  #:user "root"))
 ;--------------------------------------------------------------------------------------------------------------------------------
-;variables globales
+;variables
 ;--------------------------------------------------------------------------------------------------------------------------------
 (define i 0)
 (define casa-sistema (list))
@@ -48,7 +47,7 @@
 ;modifica la variable 'usuario-sistema' por aquel que ingreso al sistema
 (define (get-usuario-autenticado identidad clave)
   (for ([(usuaId casaId usuaIdentidad usuaClave usuaNombres usuaApellido1 usuaApellido2 usuaTelefono) (get-usuario-autenticado-sql identidad clave)])
-    (set! usuario-sistema (append (list usuaId) (list casaId) (list usuaIdentidad) (list usuaNombres) (list usuaApellido1) (list usuaApellido2) (list usuaTelefono)))))
+    (set! usuario-sistema (append (list usuaId) (list casaId) (list usuaIdentidad) (list usuaClave) (list usuaNombres) (list usuaApellido1) (list usuaApellido2) (list usuaTelefono)))))
 ;--------------------------------------------------------------------------------------------------------------------------------
 ;retorna una lista con los consumos de un contador en los ultimos 'limite' mes
 (define (contador-consumos-sql contId limite)
