@@ -100,13 +100,20 @@
        [min-width 150]
        [label "Total a pagar:"]))
 
+
+(define panel-fact4
+  (new horizontal-panel% [parent ventana-facturar][alignment '(center center)]))
+
+(new button%[parent panel-fact4][label"Simular"])
+(new button%[parent panel-fact4][label"Cancelar"]) 
+
 (define lecturas (list))
 (define consumos (list))
 
 (define (llenar-factura)
   (get-usuario-autenticado (caddr usuario-sistema) (caddddr usuario-sistema))
   (get-casa (car usuario-sistema))
-  (set! lecturas (contador-consumos-sql (car (get-contador-sql (car casa-sistema))) 10))
+  (set! lecturas (contador-registros-sql (car (get-contador-sql (car casa-sistema))) 10))
   (set! consumos (get-consumos lecturas (list)))
   (if (>= (length consumos) 1) (send txt-facturar-mes5 set-value (number->string(car consumos))) (send txt-facturar-mes5 set-value "0"))
   (if (>= (length consumos) 2) (send txt-facturar-mes1 set-value (number->string(cadr consumos))) (send txt-facturar-mes1 set-value "0"))

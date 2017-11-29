@@ -4,7 +4,7 @@
 ;--------------------------------------------------------------------------------------------------------------------------------
 ;publico
 ;--------------------------------------------------------------------------------------------------------------------------------
-(provide ventana-recomendar)
+(provide ventana-recomendar llenar-recomendar)
 ;--------------------------------------------------------------------------------------------------------------------------------
 ;ventana-recomendar
 ;--------------------------------------------------------------------------------------------------------------------------------
@@ -62,6 +62,9 @@
 (define panel-reco3
   (new horizontal-panel%[parent ventana-recomendar][alignment'(center center)]))
 
+(define (llenar-recomendar)
+  (send txt-recomendacion-consumo set-value (get-recomendacion-consumo (consumo-actual-usuario-sql (car usuario-sistema))))
+  (send txt-recomendacion-habito set-value (get-recomendacion-habitos (get-suma-locaciones-id-sql (car usuario-sistema)))))
 (new button%[parent panel-reco3][label"Simular"])
 (new button%[parent panel-reco3][label"Cancelar"]) 
 ;--------------------------------------------------------------------------------------------------------------------------------

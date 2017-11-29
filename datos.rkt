@@ -4,8 +4,9 @@
 ;publico
 ;--------------------------------------------------------------------------------------------------------------------------------
 (provide conexion autenticar registrar-sql get-usuario-id get-usuario-autenticado usuario-sistema usuario-foraneo usuario-consumo
-         contador-consumos-sql get-usuario-?-desperdicio-sql get-usuario-consumo contadores-consumos-sql consumo-actual-usuario-sql
-         casa-sistema get-casa get-contador-sql get-lectura-actual)
+         contador-registros-sql get-usuario-?-desperdicio-sql get-usuario-consumo contadores-registros-sql consumo-actual-usuario-sql
+         casa-sistema get-casa get-contador-sql get-lectura-actual get-ciudades-sql get-barrios-sql consumos-mes-sql consumos-mes-actual-sql
+         get-suma-locaciones-sql get-suma-locaciones-id-sql)
 ;--------------------------------------------------------------------------------------------------------------------------------
 ;conexion
 ;--------------------------------------------------------------------------------------------------------------------------------
@@ -21,7 +22,7 @@
 (define casa-sistema (list))
 (define usuario-sistema (list))
 (define usuario-foraneo (list))
-(define usuario-consumo (cons 0 0))
+(define usuario-consumo (cons "" 0))
 ;--------------------------------------------------------------------------------------------------------------------------------
 ;servicios
 ;--------------------------------------------------------------------------------------------------------------------------------
@@ -49,8 +50,8 @@
   (for ([(usuaId casaId usuaIdentidad usuaClave usuaNombres usuaApellido1 usuaApellido2 usuaTelefono) (get-usuario-autenticado-sql identidad clave)])
     (set! usuario-sistema (append (list usuaId) (list casaId) (list usuaIdentidad) (list usuaClave) (list usuaNombres) (list usuaApellido1) (list usuaApellido2) (list usuaTelefono)))))
 ;--------------------------------------------------------------------------------------------------------------------------------
-;retorna una lista con los consumos de un contador en los ultimos 'limite' mes
-(define (contador-consumos-sql contId limite)
+;retorna una lista con los registros de un contador en los ultimos 'limite' mes
+(define (contador-registros-sql contId limite)
   (query-list conexion "select consumo from (select year(histFechaC) as anio, month(histFechaC) as mes, histRegistroC as consumo from HISTORIAL_CONTADORES where contId = ? order by anio desc, mes desc limit ?) as CONSUMOS" contId limite))
 ;--------------------------------------------------------------------------------------------------------------------------------
 ;retorna una lista con el id del usuario que desperdicio mucha/poca agua de un registro en los sensores segun el 'tipo' dado
@@ -65,7 +66,11 @@
 ;--------------------------------------------------------------------------------------------------------------------------------
 ;retorna una lista con los consumos de los sensores en los ultimos 'limite' mes
 (define (consumos-mes-sql limite)
-  (query-list conexion "select sum(consRegistroH) from HISTORIAL_CONSUMOS group by year(consFechaH), month(consFechaH)  order by year(consFechaH) asc, month(consFechaH) asc limit ?" limite))
+  (query-list conexion "select sum(consRegistroH) from HISTORIAL_CONSUMOS group by year(consFechaH), month(consFechaH)  order by year(consFechaH) desc, month(consFechaH) desc limit ?" limite))
+;--------------------------------------------------------------------------------------------------------------------------------
+;retorna una lista con los consumos de los sensores del mes actual
+(define (consumos-mes-actual-sql)
+  (query-list conexion "select consRegistroH from HISTORIAL_CONSUMOS where year(consFechaH) = year(curdate()) and month(consFechaH) = month(curdate())"))
 ;--------------------------------------------------------------------------------------------------------------------------------
 (define (get-usuario-consumos-sql contId)
   (in-query conexion "select usuaNombres, sum(consRegistroH) as suma from (HISTORIAL_CONSUMOS inner join SENSORES on HISTORIAL_CONSUMOS.sensId = SENSORES.sensId) inner join USUARIOS on HISTORIAL_CONSUMOS.usuaId = USUARIOS.usuaId where year(consFechaH) = year(curdate()) and month(consFechaH) = month(curdate()) and SENSORES.contId = ? group by USUARIOS.usuaId order by suma desc" contId))
@@ -80,8 +85,8 @@
   (for ([(usuaNombres suma) (get-usuario-consumos-sql contId)]) 
     (if (= i cont) (set! usuario-consumo (cons usuaNombres suma)) (+ 0 0)) (set! i (+ i 1))) (set! i 0))
 ;--------------------------------------------------------------------------------------------------------------------------------
-;retorna una lista con los consumos de todos los contadores
-(define (contadores-consumos-sql limite)
+;retorna una lista con los registros de todos los contadores
+(define (contadores-registros-sql limite)
   (query-list conexion "SELECT consumo from (SELECT YEAR(histFechaC) as anio ,MONTH(histFechaC) as mes, histRegistroC as consumo FROM HISTORIAL_CONTADORES ORDER BY anio ASC, mes ASC LIMIT ?) as CONSUMOS" limite))
 ;--------------------------------------------------------------------------------------------------------------------------------
 (define (get-casa-sql id)
@@ -95,4 +100,15 @@
   (query-list conexion "select contId from CONTADORES where casaId = ?" id))
 (define (get-lectura-actual id)
   (query-list conexion "select contRegistro from CONTADORES where casaId = ?" id))
+;--------------------------------------------------------------------------------------------------------------------------------
+(define (get-ciudades-sql)
+  (query-list conexion "select ciudNombre from CIUDADES"))
+(define (get-barrios-sql ciudad)
+  (query-list conexion "select barrNombre from BARRIOS inner join CIUDADES on BARRIOS.ciudId = CIUDADES.ciudId where ciudNombre = ?" ciudad))
+;--------------------------------------------------------------------------------------------------------------------------------
+(define (get-suma-locaciones-sql)
+  (query-list conexion "select sum(consRegistroH) from (HISTORIAL_CONSUMOS inner join SENSORES on HISTORIAL_CONSUMOS.sensId = SENSORES.sensId) inner join LOCACIONES on LOCACIONES.locaId = SENSORES.locaId group by locaNombre order by LOCACIONES.locaId"))
+
+(define (get-suma-locaciones-id-sql id)
+  (query-list conexion "select sum(consRegistroH) from (HISTORIAL_CONSUMOS inner join SENSORES on HISTORIAL_CONSUMOS.sensId = SENSORES.sensId) inner join LOCACIONES on LOCACIONES.locaId = SENSORES.locaId where usuaId = ? group by locaNombre order by LOCACIONES.locaId" id))
 ;--------------------------------------------------------------------------------------------------------------------------------
