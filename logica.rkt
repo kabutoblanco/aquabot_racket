@@ -4,7 +4,7 @@
 ;publico
 ;--------------------------------------------------------------------------------------------------------------------------------
 (provide caddddr cadddddr caddddddr cadddddddr valor-metro3 get-consumos get-string get-recomendacion-consumo
-         get-recomendacion-habitos get-recomendacion-usuario get-promedio-ciudad get-vida-agua get-desperdicio-mes)
+         get-recomendacion-habitos get-recomendacion-usuario get-promedio-ciudad get-vida-agua get-desperdicio-mes get-encuesta-habitos)
 ;--------------------------------------------------------------------------------------------------------------------------------
 ;servicios basicos
 ;--------------------------------------------------------------------------------------------------------------------------------
@@ -191,4 +191,18 @@
   (define desviacion-consumo-pais (desviacion registros))
   (define mediana-consumo-pais (mediana registros))
   (- mediana-consumo-pais desviacion-consumo-pais))
+;--------------------------------------------------------------------------------------------------------------------------------
+;Retorna los valores de la encuesta
+(define (get-encuesta-habitos registros)
+  
+  (define general (list (* 100 (/ (car registros) 3))(* 100 (/ (cadr registros) 4))(* 100 (/ (caddr registros))5)(* 100 (/ (cadddr registros)) 10)))
+  (define indice (max-i general))
+  (define respuesta(media general))
+  (cond
+    [(< respuesta 25) "ahorrador" ]
+    [(< respuesta 50) "poco ahorrador"]
+    [(< respuesta 75) "precavido"]
+    [(< respuesta 100)"nada ahorrador"]
+    [(> respuesta 101)"desperdiciador"]))
+(get-encuesta-habitos '(2 3 4 20))
 ;--------------------------------------------------------------------------------------------------------------------------------

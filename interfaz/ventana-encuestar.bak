@@ -25,7 +25,7 @@
        (horiz-margin 50)
        [min-height 10]
        [min-width 150]
-       [label "¿Cuantas veces te duchas?:"]))
+       [label "¿Cuantas veces usa el baño?:"]))
 
 (define txt_pregunta2_encuesta
   (new text-field%
@@ -34,7 +34,7 @@
        (horiz-margin 50)
        [min-height 10]
        [min-width 150]
-       [label "¿Cuantas veces lavas platos en tu casa?:"]))
+       [label "¿Cuantas libras de ropa lava día?:"]))
 
 (define txt_pregunta3_encuesta
   (new text-field%
@@ -43,7 +43,7 @@
        (horiz-margin 50)
        [min-height 10]
        [min-width 150]
-       [label "¿Cuantas veces lavas tus manos al día?:"]))
+       [label "¿Cuantas veces al día te cepillas los dientes?:"]))
 
 (define txt_pregunta4_encuesta
   (new text-field%
@@ -57,12 +57,6 @@
 (define panelEncuesta
   (new horizontal-panel%[parent ventana-encuestar][alignment'(center center)]))
 
-(new button%[parent ventana-encuestar][label"Guardar"][callback (lambda(e b)(mandar-encuesta))])
+(new button%[parent ventana-encuestar][label"Guardar"])
 (new button%[parent ventana-encuestar][label"Ver Perfil"])
-
-(define (mandar-encuesta)
- (get-encuesta-habitos (guardar-respuestas)))
-(define (guardar-respuestas)
-  (list(string->number(txt_pregunta1_encuesta)) (string->number(txt_pregunta2_encuesta) (string->number(txt_pregunta3_encuesta) (string->number(txt_pregunta4_encuesta))))))
- 
 ;--------------------------------------------------------------------------------------------------------------------------------
