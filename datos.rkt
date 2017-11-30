@@ -6,7 +6,8 @@
 (provide conexion autenticar registrar-sql get-usuario-id get-usuario-autenticado usuario-sistema usuario-foraneo usuario-consumo
          contador-registros-sql get-usuario-?-desperdicio-sql get-usuario-consumo contadores-registros-sql consumo-actual-usuario-sql
          casa-sistema get-casa get-contador-sql get-lectura-actual get-ciudades-sql get-barrios-sql consumos-mes-sql consumos-mes-actual-sql
-         get-suma-locaciones-sql get-suma-locaciones-id-sql get-consumos-casa-sql get-consumos-ciudad-sql get-consumos-ciudades-sql)
+         get-suma-locaciones-sql get-suma-locaciones-id-sql get-consumos-casa-sql get-consumos-ciudad-sql get-consumos-ciudades-sql
+         actualizar-usuario get-ciudad)
 ;--------------------------------------------------------------------------------------------------------------------------------
 ;conexion
 ;--------------------------------------------------------------------------------------------------------------------------------
@@ -130,3 +131,16 @@
     inner join BARRIOS on CASAS.barrId = BARRIOS.barrId)
     inner join CIUDADES on BARRIOS.ciudId = CIUDADES.ciudId"))
 ;--------------------------------------------------------------------------------------------------------------------------------
+;actualiza un usuario
+(define (actualizar-usuario id cuidad barrio identidad clave nombres apellido1 apellido2 telefono direccion)
+  (query-exec conexion "SELECT actualizarUsuario(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)" id cuidad barrio identidad clave nombres apellido1 apellido2 telefono direccion))
+;--------------------------------------------------------------------------------------------------------------------------------
+(define (get-ciudad-sql id)
+  (in-query conexion "SELECT ciudNombre, barrNombre  FROM (CIUDADES INNER JOIN BARRIOS ON CIUDADES.ciudId = BARRIOS.ciudId)
+  INNER JOIN CASAS ON CASAS.barrId = BARRIOS.barrId WHERE casaId = ?" id))
+(define (get-ciudad id)
+  (define ciudad (list))
+  (for ([(ciudNombre barrNombre) (get-ciudad-sql id)])
+    (set! ciudad (list ciudNombre barrNombre)))
+  ciudad)
+(get-ciudad 1)

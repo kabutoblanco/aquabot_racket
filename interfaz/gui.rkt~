@@ -23,10 +23,5 @@
      [parent ventana]
      (vert-margin 10)
      [label "REGISTRAR"]
-     [callback (lambda (boton evento) (abrir-registrar))])
-
-(define (abrir-registrar)
-  (limpiar-ventana)
-  (nueva-configuracion 1)
-  (send ventana-registrar show #t))
+     [callback (lambda (boton evento) (send ventana-registrar show #t))])
 ;--------------------------------------------------------------------------------------------------------------------------------

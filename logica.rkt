@@ -82,8 +82,7 @@
           (mediana-r (cdr lista) paridad n (+ i 1)))
       (if (= (floor (/ n 2)) i)
           (car lista)
-          (mediana-r (cdr lista) paridad n (+ i 1)))
-      ))
+          (mediana-r (cdr lista) paridad n (+ i 1)))))
 ;--------------------------------------------------------------------------------------------------------------------------------
 ;retorna la mediana de los elementos de una 'lista'
 (define (mediana lista)
@@ -110,17 +109,14 @@
           (moda-r (cdr lista) lista2 r tipo))))
 ;--------------------------------------------------------------------------------------------------------------------------------
 ;retorna la moda de los elementos de una 'lista'
-(define (moda lista tipo) (moda-r (sort lista tipo) lista (list 0 (car (filter max lista))) tipo))
+(define (moda lista tipo) (moda-r (sort lista tipo) lista (list 0 (get-item lista tipo)) tipo))
 ;--------------------------------------------------------------------------------------------------------------------------------
 ;servicios funcionales
 ;--------------------------------------------------------------------------------------------------------------------------------
 ;calcular el valor en pesos colombianos del metro cubico de agua segun algunos criterios
 (define (valor-metro3 consumo1 consumo2 estrato registros)
-  (println (media (consumos-mes-sql 5)))
-  (println consumo1) (println consumo2)
   (if (< consumo1 0) (set! consumo1 (+ consumo2 1)) (set consumo1 consumo1))
   (if (= consumo2 0) (set! consumo1 (+ consumo2 1)) (set consumo1 consumo1))
-  (println consumo1) (println consumo2)
   (cond
     [(<= (- consumo1 consumo2) 0)  (/ (* estrato 16) 5)]
     [(<= (- consumo1 consumo2) 2)  (+ (* (/ (- consumo1 consumo2) (* estrato 18)) 1000) (media registros))]
@@ -135,7 +131,7 @@
       (get-consumos (cdr lista) (cons (- (car lista) (cadr lista)) lista2))
       (reverse lista2)))
 ;--------------------------------------------------------------------------------------------------------------------------------
-;retorna una recomendacion para usuario respecto a él
+;retorna una recomendacion para usuario respecto a consumo
 (define (get-recomendacion-consumo registros)
   (define porc-consumo (* 100 (/ (media (consumos-mes-actual-sql)) (car (moda registros >=)))))
   (cond
@@ -147,7 +143,7 @@
     [(< porc-consumo 100) "Empeoraste ahorrando ¡Cuidado!"]
     [(> porc-consumo 101) "Mira el valor de tu factura ¡Te lo advertí!"]))
 ;--------------------------------------------------------------------------------------------------------------------------------
-;retorna una recomendacion para usuario respecto a consumo
+;retorna una recomendacion para usuario respecto a habitos
 (define (get-recomendacion-habitos registros)
   (define loca-general (get-suma-locaciones-sql))
   (define coci-general (list (* 100 (/ (car registros)(car loca-general)))(* 100 (/ (cadr registros)(cadr loca-general)))(* 100 (/ (caddr registros)(caddr loca-general)))(* 100 (/ (cadddr registros)(cadddr loca-general)))))

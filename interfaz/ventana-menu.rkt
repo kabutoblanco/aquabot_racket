@@ -1,5 +1,5 @@
 #lang racket/gui
-(require "ventana-perfil.rkt")
+(require "ventana-registrar.rkt")
 (require "ventana-facturar.rkt")
 (require "ventana-recomendar.rkt")
 (require "ventana-estadistica.rkt")
@@ -21,7 +21,7 @@
      (vert-margin 10)
      (horiz-margin 50)
      [min-width 150]
-     [callback (lambda (boton evento) (send ventana-perfil show #t) (llenar-perfil))])
+     [callback (lambda (boton evento) (send ventana-registrar show #t) (nueva-configuracion 2) (limpiar-ventana) (llenar-perfil))])
 
 (new button%
      [parent ventana-menu]
