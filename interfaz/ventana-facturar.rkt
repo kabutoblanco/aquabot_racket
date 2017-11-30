@@ -125,7 +125,7 @@
   (send txt-facturar-consumo set-value (number->string(- (string->number(send txt-facturar-lectura2 get-value)) (string->number(send txt-facturar-lectura1 get-value)))))
   (get-usuario-consumo (car (get-contador-sql (car casa-sistema))) > 0)(send txt-facturar-usuario1 set-value (car usuario-consumo))
   (get-usuario-consumo (car (get-contador-sql (car casa-sistema))) < 0)(send txt-facturar-usuario2 set-value (car usuario-consumo))
-  (send txt-facturar-m3 set-value (number->string(floor (valor-metro3 (string->number(send txt-facturar-consumo get-value)) (string->number(send txt-facturar-mes1 get-value)) (caddr casa-sistema)))))
+  (send txt-facturar-m3 set-value (number->string(floor (valor-metro3 (string->number(send txt-facturar-consumo get-value)) (string->number(send txt-facturar-mes1 get-value)) (caddr casa-sistema) (consumo-actual-usuario-sql (car usuario-sistema))))))
   (send text-facturar-pagar set-value (number->string(floor(* (string->number(send txt-facturar-m3 get-value)) (string->number(send txt-facturar-consumo get-value))))))
   (send panel-facturas refresh)(sleep/yield 1)(pintar-facturas consumos dc 0 0))
 ;--------------------------------------------------------------------------------------------------------------------------------

@@ -4,7 +4,7 @@
 ;publico
 ;--------------------------------------------------------------------------------------------------------------------------------
 (provide caddddr cadddddr caddddddr cadddddddr valor-metro3 get-consumos get-string get-recomendacion-consumo
-         get-recomendacion-habitos)
+         get-recomendacion-habitos get-recomendacion-usuario get-promedio-ciudad get-vida-agua get-desperdicio-mes)
 ;--------------------------------------------------------------------------------------------------------------------------------
 ;servicios basicos
 ;--------------------------------------------------------------------------------------------------------------------------------
@@ -73,7 +73,7 @@
   (varianza-r lista (media lista) (- (length lista) 1) 0))
 ;--------------------------------------------------------------------------------------------------------------------------------
 ;retorna la desviacion de los elementos de una 'lista'
-(define (desviacion varianza) (sqrt varianza))
+(define (desviacion lista) (sqrt (varianza lista)))
 ;--------------------------------------------------------------------------------------------------------------------------------
 (define (mediana-r lista paridad n i)
   (if (= paridad 0)
@@ -86,10 +86,11 @@
       ))
 ;--------------------------------------------------------------------------------------------------------------------------------
 ;retorna la mediana de los elementos de una 'lista'
-(define (mediana lista paridad n)
+(define (mediana lista)
+  (define paridad (modulo (length lista) 2))
   (if (null? lista)
       0
-      (mediana-r lista paridad n 0)))
+      (mediana-r lista paridad (length lista) 0)))
 ;--------------------------------------------------------------------------------------------------------------------------------
 (define (contar-r lista n r)
   (if (null? lista)
@@ -114,7 +115,7 @@
 ;servicios funcionales
 ;--------------------------------------------------------------------------------------------------------------------------------
 ;calcular el valor en pesos colombianos del metro cubico de agua segun algunos criterios
-(define (valor-metro3 consumo1 consumo2 estrato)
+(define (valor-metro3 consumo1 consumo2 estrato registros)
   (println (media (consumos-mes-sql 5)))
   (println consumo1) (println consumo2)
   (if (< consumo1 0) (set! consumo1 (+ consumo2 1)) (set consumo1 consumo1))
@@ -122,11 +123,11 @@
   (println consumo1) (println consumo2)
   (cond
     [(<= (- consumo1 consumo2) 0)  (/ (* estrato 16) 5)]
-    [(<= (- consumo1 consumo2) 2)  (* (/ (- consumo1 consumo2) (* estrato 18)) 10000)]
-    [(<= (- consumo1 consumo2) 5)  (* (/ (- consumo1 consumo2) (* estrato 17)) 10000)]
-    [(<= (- consumo1 consumo2) 8)  (* (/ (- consumo1 consumo2) (* estrato 16)) 10000)]
-    [(<= (- consumo1 consumo2) 11) (* (/ (- consumo1 consumo2) (* estrato 15)) 10000)]
-    [(>  (- consumo1 consumo2) 11) (* (/ (- consumo1 consumo2) (* estrato 12)) 10000)]))
+    [(<= (- consumo1 consumo2) 2)  (+ (* (/ (- consumo1 consumo2) (* estrato 18)) 1000) (media registros))]
+    [(<= (- consumo1 consumo2) 5)  (+ (* (/ (- consumo1 consumo2) (* estrato 17)) 1000) (media registros))]
+    [(<= (- consumo1 consumo2) 8)  (+ (* (/ (- consumo1 consumo2) (* estrato 16)) 1000) (media registros))]
+    [(<= (- consumo1 consumo2) 11) (+ (* (/ (- consumo1 consumo2) (* estrato 15)) 1000) (media registros))]
+    [(>  (- consumo1 consumo2) 11) (+ (* (/ (- consumo1 consumo2) (* estrato 12)) 1000) (media registros))]))
 ;--------------------------------------------------------------------------------------------------------------------------------
 ;retorna una lista con los consumos de la 'lista'
 (define (get-consumos lista lista2)
@@ -136,7 +137,7 @@
 ;--------------------------------------------------------------------------------------------------------------------------------
 ;retorna una recomendacion para usuario respecto a él
 (define (get-recomendacion-consumo registros)
-  (define porc-consumo (* 100 (/ (media registros) (car (moda (consumos-mes-actual-sql) >=)))))
+  (define porc-consumo (* 100 (/ (media (consumos-mes-actual-sql)) (car (moda registros >=)))))
   (cond
     [(< porc-consumo 10) "Estas ahorrando mucho ¡Excelente!"]
     [(< porc-consumo 30) "Ahorrando bien ¡Sigue así!"]
@@ -164,4 +165,34 @@
     [(= locacion 2) "el lava platos"]
     [(= locacion 3) "el lava manos"]
     [(= locacion 4) "el inodoro"]))
+;--------------------------------------------------------------------------------------------------------------------------------
+;retorna una recomendacion para usuario respecto a el
+(define (get-recomendacion-usuario registros casa)
+  (define porc-consumo (* 100 (/ (media (get-consumos-casa-sql casa)) (car (moda registros >=)))))
+  (cond
+    [(< porc-consumo 10) "Eres el mas ahorrador de tu casa"]
+    [(< porc-consumo 30) "Bueno ahorras bien en tu casa"]
+    [(< porc-consumo 50) "Vas ahorrando un poquito mejor en casa"]
+    [(< porc-consumo 70) "¡Opale! estas por encima de tu promedio en casa"]
+    [(< porc-consumo 90) "!Alerta ome! llegaste casi al tope de consumo en casa"]
+    [(< porc-consumo 100) "¡Dios! eres el mas consumo en casa"]
+    [(> porc-consumo 101) "Lastima, desperdicias mucho en tu casa"]))
+;--------------------------------------------------------------------------------------------------------------------------------
+;retorna el promedio de la ciudad de donde vive el usuario
+(define (get-promedio-ciudad id)
+  (media (get-consumos-ciudad-sql id)))
+;--------------------------------------------------------------------------------------------------------------------------------
+;retorna la esperanza de vida del agua en el pais en anios
+(define (get-vida-agua)
+  (define consumo-pais (get-consumos-ciudades-sql))
+  (define desviacion-consumo-pais (desviacion consumo-pais))
+  (define mediana-consumo-pais (mediana consumo-pais))
+  (* (/ mediana-consumo-pais desviacion-consumo-pais) 15000))
+;--------------------------------------------------------------------------------------------------------------------------------
+;retorna el desperdicio en el ultimo mes
+(define (get-desperdicio-mes registros)
+  (define consumo-pais registros)
+  (define desviacion-consumo-pais (desviacion registros))
+  (define mediana-consumo-pais (mediana registros))
+  (- mediana-consumo-pais desviacion-consumo-pais))
 ;--------------------------------------------------------------------------------------------------------------------------------

@@ -6,7 +6,7 @@
 (provide conexion autenticar registrar-sql get-usuario-id get-usuario-autenticado usuario-sistema usuario-foraneo usuario-consumo
          contador-registros-sql get-usuario-?-desperdicio-sql get-usuario-consumo contadores-registros-sql consumo-actual-usuario-sql
          casa-sistema get-casa get-contador-sql get-lectura-actual get-ciudades-sql get-barrios-sql consumos-mes-sql consumos-mes-actual-sql
-         get-suma-locaciones-sql get-suma-locaciones-id-sql)
+         get-suma-locaciones-sql get-suma-locaciones-id-sql get-consumos-casa-sql get-consumos-ciudad-sql get-consumos-ciudades-sql)
 ;--------------------------------------------------------------------------------------------------------------------------------
 ;conexion
 ;--------------------------------------------------------------------------------------------------------------------------------
@@ -108,7 +108,25 @@
 ;--------------------------------------------------------------------------------------------------------------------------------
 (define (get-suma-locaciones-sql)
   (query-list conexion "select sum(consRegistroH) from (HISTORIAL_CONSUMOS inner join SENSORES on HISTORIAL_CONSUMOS.sensId = SENSORES.sensId) inner join LOCACIONES on LOCACIONES.locaId = SENSORES.locaId group by locaNombre order by LOCACIONES.locaId"))
-
 (define (get-suma-locaciones-id-sql id)
   (query-list conexion "select sum(consRegistroH) from (HISTORIAL_CONSUMOS inner join SENSORES on HISTORIAL_CONSUMOS.sensId = SENSORES.sensId) inner join LOCACIONES on LOCACIONES.locaId = SENSORES.locaId where usuaId = ? group by locaNombre order by LOCACIONES.locaId" id))
+;--------------------------------------------------------------------------------------------------------------------------------
+;retorna una lista con los consumos del mes respecto a los usuarios de la casa id
+(define (get-consumos-casa-sql id)
+  (query-list conexion "select consRegistroH from HISTORIAL_CONSUMOS INNER JOIN USUARIOS ON HISTORIAL_CONSUMOS.usuaId = USUARIOS.usuaId where year(consFechaH) = year(curdate()) and month(consFechaH) = month(curdate()) and  casaId = ?" id))       
+;--------------------------------------------------------------------------------------------------------------------------------
+(define (get-consumos-ciudad-sql id)
+  (query-list conexion "select consRegistroH
+  from ((((SENSORES inner join HISTORIAL_CONSUMOS on SENSORES.sensId = HISTORIAL_CONSUMOS.sensId)
+    inner join CONTADORES on SENSORES.contId = CONTADORES.contId)
+    inner join CASAS on CONTADORES.casaId = CASAS.casaId)
+    inner join BARRIOS on CASAS.barrId = BARRIOS.barrId)
+    inner join CIUDADES on BARRIOS.ciudId = CIUDADES.ciudId where CASAS.casaId = ?" id))
+(define (get-consumos-ciudades-sql)
+  (query-list conexion "select consRegistroH
+  from ((((SENSORES inner join HISTORIAL_CONSUMOS on SENSORES.sensId = HISTORIAL_CONSUMOS.sensId)
+    inner join CONTADORES on SENSORES.contId = CONTADORES.contId)
+    inner join CASAS on CONTADORES.casaId = CASAS.casaId)
+    inner join BARRIOS on CASAS.barrId = BARRIOS.barrId)
+    inner join CIUDADES on BARRIOS.ciudId = CIUDADES.ciudId"))
 ;--------------------------------------------------------------------------------------------------------------------------------

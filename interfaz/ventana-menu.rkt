@@ -45,5 +45,5 @@
      (vert-margin 10)
      (horiz-margin 50)
      [min-width 150]
-     [callback (lambda (boton evento) (send ventana-estadistica show #t))])
+     [callback (lambda (boton evento) (send ventana-estadistica show #t) (llenar-estadistica))])
 ;--------------------------------------------------------------------------------------------------------------------------------

@@ -48,7 +48,6 @@
 
 (define (abrir-perfil)
   (get-usuario-autenticado (send txt-ingresar-identidad get-value) (send txt-ingresar-clave get-value))
-  (get-casa (car usuario-sistema))
   (send ventana-menu show #t)
   (send ventana-ingresar show #f))
 ;--------------------------------------------------------------------------------------------------------------------------------
